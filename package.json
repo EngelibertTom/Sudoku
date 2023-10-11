@@ -1,0 +1,25 @@
+{
+  "name": "jsalgo",
+  "module": "src/index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/figlet": "^1.5.6",
+    "bun-types": "latest"
+  },
+
+  "scripts": {
+
+    "start": "bun src/index.ts",
+    "dev": "bun --watch src/index.ts",
+    "start:backend": "bun run src/backend/index.ts",
+    "dev:backend": "bun --hot run src/backend/index.ts",
+    "build:front": "bun --minify build src/frontend/index.ts --outdir www/js",
+    "dev:front": "bun --minify --watch build src/frontend/index.ts --outdir www/js"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "figlet": "^1.6.0"
+  }
+}
