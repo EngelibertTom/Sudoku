@@ -153,6 +153,7 @@ canvas.addEventListener("mouseout", (event: MouseEvent) => {
 })
 
 
+
 document.addEventListener("keydown", (event: KeyboardEvent) => {
 	if (selectedCell !== null) {
 		const i = selectedCell[0];
@@ -167,11 +168,68 @@ document.addEventListener("keydown", (event: KeyboardEvent) => {
 	}
 });
 
+
 function toggle(value: number, i: number, j: number) {
 	if (cellValues[j][i] === value) {
 		cellValues[j][i] = null;
-	} else {
+		updateDomains(i, j, value, true);
+	} else if (cellValues[j][i] === null && cellDomains[j][i].includes(value)) {
 		cellValues[j][i] = value;
+		updateDomains(i, j, value, false);
+	}
+}
+
+function updateDomains(i: number, j: number, value: number, removeFromDomains: boolean) {
+	for (let x = 0; x < 9; x++) {
+		if (x !== i) {
+			const domain = cellDomains[j][x];
+			if (removeFromDomains) {
+				const index = domain.indexOf(value);
+				if (index !== -1) {
+					domain.splice(index, 1);
+				}
+			} else {
+				if (domain.includes(value)) {
+					domain.splice(domain.indexOf(value), 1);
+				}
+			}
+		}
+	}
+
+	for (let y = 0; y < 9; y++) {
+		if (y !== j) {
+			const domain = cellDomains[y][i];
+			if (removeFromDomains) {
+				const index = domain.indexOf(value);
+				if (index !== -1) {
+					domain.splice(index, 1);
+				}
+			} else {
+				if (domain.includes(value)) {
+					domain.splice(domain.indexOf(value), 1);
+				}
+			}
+		}
+	}
+
+	const groupI = Math.floor(i / 3);
+	const groupJ = Math.floor(j / 3);
+	for (let x = groupI * 3; x < groupI * 3 + 3; x++) {
+		for (let y = groupJ * 3; y < groupJ * 3 + 3; y++) {
+			if (x !== i || y !== j) {
+				const domain = cellDomains[y][x];
+				if (removeFromDomains) {
+					const index = domain.indexOf(value);
+					if (index !== -1) {
+						domain.splice(index, 1);
+					}
+				} else {
+					if (domain.includes(value)) {
+						domain.splice(domain.indexOf(value), 1);
+					}
+				}
+			}
+		}
 	}
 }
 
