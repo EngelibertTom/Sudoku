@@ -1,6 +1,6 @@
 import { join } from "node:path"
 import { WatchEventType, watch, FSWatcher } from "node:fs"
-import { ServerWebSocket, Server } from "bun"
+import type { ServerWebSocket, Server } from "bun"
 
 const port: number = parseInt(process.argv[2])
 const baseDir = join(import.meta.dir, "..", "..", "www")
@@ -42,8 +42,10 @@ const server = Bun.serve({
             wsClients.delete(ws)
         },
         message(ws: ServerWebSocket, message: string) {
-            console.log(`Message received from "${ws.remoteAddress}": "${message}"`)
-            ws.send("Well received")
+					if (message !== "ping") {
+						console.log(`Message received from "${ws.remoteAddress}": "${message}"`)
+					}
+          ws.send("Well received")
         }
     }
 })
